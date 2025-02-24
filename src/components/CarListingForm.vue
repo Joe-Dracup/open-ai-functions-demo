@@ -58,7 +58,7 @@
           <label
             for="price"
             class="block text-sm font-medium text-gray-700 mb-1"
-            >Price ($)</label
+            >Price (£)</label
           >
           <input
             id="price"

@@ -4,14 +4,16 @@ import requestGenerator from '../gptRequests';
 import useUIInteractor from '../composables/useUIInteraction';
 import CarListingForm from './CarListingForm.vue';
 
-const logResponseToUI = false;
+const logResponseToUI = true;
 const exampleNumber = 'example1';
+const useTextBox = false;
 
 //#region
 const transcript = ref('');
 const isRecording = ref(false);
 const errorMessage = ref('');
 const gptResult = ref();
+const textInputValue = ref('');
 let recognition = null;
 
 const { response } = useUIInteractor();
@@ -120,43 +122,60 @@ async function sendToOpenAI(text) {
 
 <template>
   <div class="p-4">
-    <button
-      class="relative p-4 rounded-full transition-all duration-300 hover:bg-gray-100"
-      :class="isRecording ? 'text-red-500' : 'text-gray-600'"
-      @mousedown="startRecording"
-      @mouseup="stopRecording"
-      @mouseleave="stopRecording"
-    >
-      <!-- Microphone icon (SVG) -->
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="w-8 h-8"
-        :class="isRecording ? 'animate-pulse' : ''"
-      >
-        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-        <line x1="12" y1="19" x2="12" y2="23" />
-        <line x1="8" y1="23" x2="16" y2="23" />
-      </svg>
-
-      <!-- Recording indicator ring -->
-      <div
-        v-if="isRecording"
-        class="absolute inset-0 rounded-full border-2 border-red-500 animate-ping"
+    <div v-if="useTextBox">
+      <textarea
+        id="description"
+        v-model="textInputValue"
+        rows="3"
+        class="w-[50%] p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
       />
-    </button>
-
-    <div v-if="errorMessage" class="mt-4 text-red-500">
-      {{ errorMessage }}
+      <button
+        type="submit"
+        class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        @click="sendToOpenAI(textInputValue)"
+      >
+        send to gpt
+      </button>
     </div>
+    <div v-else>
+      <button
+        class="relative p-4 rounded-full transition-all duration-300 hover:bg-gray-100"
+        :class="isRecording ? 'text-red-500' : 'text-gray-600'"
+        @mousedown="startRecording"
+        @mouseup="stopRecording"
+        @mouseleave="stopRecording"
+      >
+        <!-- Microphone icon (SVG) -->
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="w-8 h-8"
+          :class="isRecording ? 'animate-pulse' : ''"
+        >
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+          <line x1="12" y1="19" x2="12" y2="23" />
+          <line x1="8" y1="23" x2="16" y2="23" />
+        </svg>
 
-    <div v-if="transcript" class="mt-4 p-4 bg-gray-100 rounded">
-      prompt: "{{ transcript }}"
+        <!-- Recording indicator ring -->
+        <div
+          v-if="isRecording"
+          class="absolute inset-0 rounded-full border-2 border-red-500 animate-ping"
+        />
+      </button>
+
+      <div v-if="errorMessage" class="mt-4 text-red-500">
+        {{ errorMessage }}
+      </div>
+
+      <div v-if="transcript" class="mt-4 p-4 bg-gray-100 rounded">
+        prompt: "{{ transcript }}"
+      </div>
     </div>
 
     <div v-if="response" class="mt-4 p-4 bg-gray-100 rounded">
