@@ -1,5 +1,24 @@
-# Vue 3 + TypeScript + Vite
+open-ai-functions-demo
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+quick demo app to showcase using open ai functions
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+not trying to be a great example of code quality, lots of plugging in AI generated components together
+
+to run:
+
+```
+clone
+
+npm i
+
+copy sample.env into a .env file
+
+fill in open ai key
+
+npm run dev
+
+```
+
+works based on the `exampleNumber` string in Microphone.vue.
+
+just increment this up to example 4 to see the different examples of ways this could be used
